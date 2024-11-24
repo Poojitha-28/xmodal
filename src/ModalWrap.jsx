@@ -12,7 +12,7 @@ function ModalWrap() {
 
   // Form data state
   const [formData, setFormData] = useState({
-    fullName: '',
+    username: '',
     email: '',
     dob: '',
     phone: '',
@@ -20,7 +20,7 @@ function ModalWrap() {
 
   // State to track validation errors
   const [errors, setErrors] = useState({
-    fullName: '',
+    username: '',
     email: '',
     phone: '',
   });
@@ -40,17 +40,33 @@ function ModalWrap() {
 
     // Reset errors
     let formErrors = {
-      fullName: '',
+      username: '',
       email: '',
       phone: '',
     };
 
-    // Validation
     if (!formData.fullName) formErrors.fullName = 'Full Name is required!';
-    if (!formData.email || !formData.email.includes('@'))
-      formErrors.email = 'Valid Email is required!';
-    if (formData.phone.length !== 10 || isNaN(formData.phone))
-      formErrors.phone = 'Phone number must be exactly 10 digits!';
+    
+    // Email Validation
+    if (!formData.email || !formData.email.includes('@')) {
+      formErrors.email = 'Invalid email';
+      alert('Invalid email. Please check your email address.'); // Alert for invalid email
+    }
+
+    // Phone Validation
+    if (formData.phone.length !== 10 || isNaN(formData.phone)) {
+      debugger;
+      // formErrors.phone = 'Invalid phone number';
+      alert('Invalid phone number. Please enter a 10-digit phone number.'); // Alert for invalid phone number
+    }
+
+    // Date of Birth Validation
+    const today = new Date();
+    const dob = new Date(formData.dob);
+    if (dob > today) {
+      // formErrors.dob = 'Invalid date of birth';
+      alert('Invalid date of birth. Please enter a valid date of birth.'); // Alert for future DOB
+    }
 
     setErrors(formErrors);
 
@@ -62,7 +78,7 @@ function ModalWrap() {
   };
 
   return (
-    <div className="App">
+    <div className="modal">
       <h1>User Details Form</h1>
       {/* Button to open modal */}
       <button onClick={() => setIsModalOpen(true)}>Open Form</button>
@@ -74,16 +90,16 @@ function ModalWrap() {
           <h2>Enter Details</h2>
           <form onSubmit={handleSubmit}>
             {/* Full Name */}
-            <label htmlFor="fullName">Full Name</label>
+            <label htmlFor="username">Full Name</label>
             <input
               type="text"
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
+              id="username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               required
             />
-            {errors.fullName && <span className="error">{errors.fullName}</span>}
+            {errors.username && <span className="error">{errors.username}</span>}
 
             {/* Email */}
             <label htmlFor="email">Email</label>
@@ -121,7 +137,7 @@ function ModalWrap() {
             />
             {errors.phone && <span className="error">{errors.phone}</span>}
 
-            <button type="submit">Submit</button>
+            <button type="submit" className='submit-button'>Submit</button>
           </form>
         </div>
       </Modal>
