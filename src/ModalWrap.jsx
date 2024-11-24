@@ -84,7 +84,8 @@ function ModalWrap() {
       <button onClick={() => setIsModalOpen(true)}>Open Form</button>
 
       {/* Modal using react-modal */}
-      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal" overlayClassName="overlay">
+      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal-content" overlayClassName="overlay"         closeTimeoutMS={200}
+      >
         <div className="modal-content">
           <span className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</span>
           <h2>Enter Details</h2>
