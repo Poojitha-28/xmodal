@@ -1,149 +1,122 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
-import './App.css';
-import './ModalWrap.css';
+import React, { useState } from "react";
 
-// Set up the modal root element
-Modal.setAppElement('#root');
-
-function ModalWrap() {
-  // State to control modal visibility
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Form data state
+const Modal = ({ setIsModalOpen, setModalOpenBackground }) => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    dob: '',
-    phone: '',
+    username: "",
+    email: "",
+    phone: "",
+    dob: "",
   });
 
-  // State to track validation errors
-  const [errors, setErrors] = useState({
-    username: '',
-    email: '',
-    phone: '',
-  });
-
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleBackgroundClick = () => {
+    setIsModalOpen(false);
+    setModalOpenBackground(false);
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      username: "",
+      email: "",
+      phone: "",
+      dob: "",
     }));
   };
 
-  // Handle form submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setFormData((prevState) => ({ ...prevState, [key]: value }));
+  };
 
-    // Reset errors
-    let formErrors = {
-      username: '',
-      email: '',
-      phone: '',
-    };
-
-    if (!formData.fullName) formErrors.fullName = 'Full Name is required!';
-    
-    // Email Validation
-    if (!formData.email || !formData.email.includes('@')) {
-      formErrors.email = 'Invalid email';
-      alert('Invalid email. Please check your email address.'); // Alert for invalid email
+  const validationCheck = () => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      window.alert(
+        "Invalid email. Your email address should be in the format:- text@text.com"
+      );
+      return;
     }
 
-    // Phone Validation
-    if (formData.phone.length !== 10 || isNaN(formData.phone)) {
-      debugger;
-      // formErrors.phone = 'Invalid phone number';
-      alert('Invalid phone number. Please enter a 10-digit phone number.'); // Alert for invalid phone number
+    if (formData.phone.length < 10) {
+      window.alert(
+        "Invalid phone number. Please enter a 10-digit phone number."
+      );
+      return;
     }
 
-    // Date of Birth Validation
-    const today = new Date();
-    const dob = new Date(formData.dob);
-    if (dob > today) {
-      // formErrors.dob = 'Invalid date of birth';
-      alert('Invalid date of birth. Please enter a valid date of birth.'); // Alert for future DOB
-    }
-
-    setErrors(formErrors);
-
-    // If no errors, process the form (e.g., submit)
-    if (!Object.values(formErrors).some((err) => err !== '')) {
-      alert('Form submitted successfully!');
-      setIsModalOpen(false); // Close the modal on successful submit
+    const inputDate = new Date(formData.dob);
+    const currentDate = new Date();
+    if (currentDate < inputDate) {
+      window.alert(
+        "Invalid date of birth. Date of birth cannot be in the future."
+      );
+      return;
     }
   };
 
   return (
-    <div className="modal">
-      <h1>User Details Form</h1>
-      {/* Button to open modal */}
-      <button onClick={() => setIsModalOpen(true)}>Open Form</button>
-
-      {/* Modal using react-modal */}
-      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal-content" overlayClassName="overlay"         closeTimeoutMS={200}
+    <div className="modalBackground" onClick={handleBackgroundClick}>
+      <div
+        className="modalContainer"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
-        <div className="modal-content">
-          <span className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</span>
-          <h2>Enter Details</h2>
-          <form onSubmit={handleSubmit}>
-            {/* Full Name */}
-            <label htmlFor="username">Full Name</label>
+        <div className="modalHeader">
+          <h1>Fill Details</h1>
+        </div>
+        <div className="modalBody">
+          <form onSubmit={validationCheck}>
+            <label htmlFor="username">
+              <h3>Username:</h3>
+            </label>
             <input
               type="text"
-              id="username"
               name="username"
               value={formData.username}
               onChange={handleChange}
               required
             />
-            {errors.username && <span className="error">{errors.username}</span>}
 
-            {/* Email */}
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              <h3>Email Address:</h3>
+            </label>
             <input
-              type="email"
-              id="email"
+              type="text"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
             />
-            {errors.email && <span className="error">{errors.email}</span>}
 
-            {/* Date of Birth */}
-            <label htmlFor="dob">Date of Birth</label>
+            <label htmlFor="phone">
+              <h3>Phone Number:</h3>
+            </label>
             <input
-              type="date"
-              id="dob"
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="dob">
+              <h3>Date of Birth:</h3>
+            </label>
+            <input
+              type="Date"
               name="dob"
               value={formData.dob}
               onChange={handleChange}
               required
             />
+            <br />
 
-            {/* Phone Number */}
-            <label htmlFor="phone">Phone Number</label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              maxLength="10"
-            />
-            {errors.phone && <span className="error">{errors.phone}</span>}
-
-            <button type="submit" className='submit-button'>Submit</button>
+            <button type="submit" className="submit">
+              Submit
+            </button>
           </form>
         </div>
-      </Modal>
+      </div>
     </div>
   );
-}
+};
 
-export default ModalWrap;
+export default Modal;
