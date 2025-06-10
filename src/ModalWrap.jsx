@@ -18,7 +18,8 @@ const Modal = ({ setIsModalOpen, setModalOpenBackground }) => {
       phone: "",
       dob: "",
     }));
-  };
+    };
+
 
   const handleChange = (e) => {
     const key = e.target.name;
