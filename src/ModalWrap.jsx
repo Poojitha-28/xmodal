@@ -5,8 +5,8 @@ const Modal = ({ setIsModalOpen, setModalOpenBackground }) => {
     username: "",
     email: "",
     phone: "",
-    dob: "",
   });
+
 
   const handleBackgroundClick = () => {
     setIsModalOpen(false);
@@ -18,7 +18,8 @@ const Modal = ({ setIsModalOpen, setModalOpenBackground }) => {
       phone: "",
       dob: "",
     }));
-  };
+    };
+
 
   const handleChange = (e) => {
     const key = e.target.name;
