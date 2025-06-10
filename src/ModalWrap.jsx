@@ -5,7 +5,6 @@ const Modal = ({ setIsModalOpen, setModalOpenBackground }) => {
     username: "",
     email: "",
     phone: "",
-    dob: "",
   });
 
 
