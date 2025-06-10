@@ -8,6 +8,7 @@ const Modal = ({ setIsModalOpen, setModalOpenBackground }) => {
     dob: "",
   });
 
+
   const handleBackgroundClick = () => {
     setIsModalOpen(false);
     setModalOpenBackground(false);
